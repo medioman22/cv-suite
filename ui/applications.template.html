@@ -1,0 +1,324 @@
+<title>Applications — Live Pipeline</title>
+<script>(function(){try{var t=localStorage.getItem('jsboard-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+  :root{
+    --ground:#f4f3f1; --surface:#ffffff; --surface-2:#fbfaf9;
+    --border:#e4e2de; --border-strong:#cbc8c2;
+    --ink:#333333; --ink-soft:#555555; --muted:#7a7a7a; --faint:#9c9a95;
+    --accent:#007ea8; --accent-ink:#00607f; --accent-wash:#e6f2f6;
+    --offer:#2f9e6b; --interviewing:#bf882c; --applied:#007ea8; --rejected:#a09e99;
+    --offer-wash:#e7f4ee; --interviewing-wash:#f6eede; --applied-wash:#e6f2f6; --rejected-wash:#efeeec;
+    --shadow:0 1px 2px rgba(40,38,34,.05),0 6px 20px rgba(40,38,34,.06);
+    --radius:12px; --font:'Avenir Next','Avenir','Century Gothic',ui-sans-serif,system-ui,sans-serif;
+    --mono:ui-monospace,'SF Mono','Menlo','Consolas',monospace;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --ground:#191a1d; --surface:#232428; --surface-2:#1f2023; --border:#33343a; --border-strong:#42434a;
+    --ink:#e9e7e2; --ink-soft:#c3c1bb; --muted:#93918b; --faint:#6f6d68;
+    --accent:#3aaecf; --accent-ink:#8fd4e6; --accent-wash:#132b33;
+    --offer:#4fbd8a; --interviewing:#d6a24e; --applied:#3aaecf; --rejected:#8a8884;
+    --offer-wash:#16302447; --interviewing-wash:#33280f4d; --applied-wash:#132b33; --rejected-wash:#2a2a2d;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  }}
+  :root[data-theme="light"]{
+    --ground:#f4f3f1; --surface:#ffffff; --surface-2:#fbfaf9; --border:#e4e2de; --border-strong:#cbc8c2;
+    --ink:#333; --ink-soft:#555; --muted:#7a7a7a; --faint:#9c9a95;
+    --accent:#007ea8; --accent-ink:#00607f; --accent-wash:#e6f2f6;
+    --offer:#2f9e6b; --interviewing:#bf882c; --applied:#007ea8; --rejected:#a09e99;
+    --offer-wash:#e7f4ee; --interviewing-wash:#f6eede; --applied-wash:#e6f2f6; --rejected-wash:#efeeec;
+    --shadow:0 1px 2px rgba(40,38,34,.05),0 6px 20px rgba(40,38,34,.06);
+  }
+  :root[data-theme="dark"]{
+    --ground:#191a1d; --surface:#232428; --surface-2:#1f2023; --border:#33343a; --border-strong:#42434a;
+    --ink:#e9e7e2; --ink-soft:#c3c1bb; --muted:#93918b; --faint:#6f6d68;
+    --accent:#3aaecf; --accent-ink:#8fd4e6; --accent-wash:#132b33;
+    --offer:#4fbd8a; --interviewing:#d6a24e; --applied:#3aaecf; --rejected:#8a8884;
+    --offer-wash:#16302447; --interviewing-wash:#33280f4d; --applied-wash:#132b33; --rejected-wash:#2a2a2d;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;letter-spacing:.1px}
+  .wrap{max-width:1240px;margin:0 auto;padding:26px 22px 80px}
+  a{color:var(--accent);text-decoration:none}
+  .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding-bottom:14px;border-bottom:1.5px solid var(--accent);margin-bottom:22px}
+  header.top h1{font-size:26px;font-weight:700;margin:6px 0 0;letter-spacing:-.2px}
+  header.top .sub{color:var(--muted);font-size:13px;margin-top:3px}
+  .head-right{display:flex;gap:10px;align-items:center}
+  .nav{display:flex;gap:8px}
+  .nav a{border:1px solid var(--border-strong);background:var(--surface);color:var(--ink-soft);border-radius:20px;padding:7px 13px;font-size:13px;display:flex;gap:6px;align-items:center}
+  .nav a:hover{border-color:var(--accent);color:var(--accent)}
+  .nav a.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .theme-btn{border:1px solid var(--border-strong);background:var(--surface);color:var(--ink-soft);border-radius:20px;padding:7px 11px;font:inherit;font-size:13px;cursor:pointer}
+  .theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 24px}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);border-left:3px solid var(--c,var(--accent))}
+  .stat .n{font-family:var(--mono);font-size:28px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;color:var(--c,var(--ink))}
+  .stat .l{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:7px;font-weight:600}
+
+  .board{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;align-items:start}
+  .col{background:transparent}
+  .col-head{display:flex;align-items:center;gap:8px;margin:0 2px 12px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+  .col-head .dot{width:9px;height:9px;border-radius:50%}
+  .col-head .cnt{font-family:var(--mono);color:var(--muted);font-weight:600;letter-spacing:0}
+  .cards{display:flex;flex-direction:column;gap:12px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;border-top:3px solid var(--c)}
+  .card .b{padding:13px 15px 14px}
+  .card .co{font-weight:700;font-size:15px;letter-spacing:-.1px}
+  .card .role{color:var(--ink-soft);font-size:13px;margin-top:2px;line-height:1.35}
+  .card .rows{margin-top:11px;display:flex;flex-direction:column;gap:7px}
+  .card .r{display:flex;gap:8px;font-size:12.5px;color:var(--ink-soft);align-items:flex-start}
+  .card .r .ic{color:var(--muted);flex-shrink:0;width:15px;text-align:center}
+  .card .r .dt{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
+  .next{margin-top:12px;background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--c);border-radius:8px;padding:9px 11px;font-size:12.5px;line-height:1.45}
+  .next .lbl{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:3px}
+  .next.closed{opacity:.7}
+  .pill{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700;letter-spacing:.03em;text-transform:capitalize;background:var(--cw);color:var(--c);white-space:nowrap}
+  .co-line{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+
+  .sect-title{display:flex;align-items:center;gap:12px;margin:34px 0 14px}
+  .sect-title h2{margin:0;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .sect-title .rule{flex:1;height:1px;background:var(--border)}
+  .contacts{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+  .contact{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px}
+  .contact .nm{font-weight:700;font-size:14.5px}
+  .contact .rl{color:var(--muted);font-size:12.5px;margin-top:1px}
+  .contact .em{font-family:var(--mono);font-size:11.5px;margin-top:8px;word-break:break-all}
+  .contact .nt{font-size:12.5px;color:var(--ink-soft);margin-top:8px;line-height:1.45}
+
+  .dcount{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .drafts{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;margin-bottom:6px}
+  .draft{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--interviewing);
+    border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
+  .draft .dh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:13px 15px 8px;flex-wrap:wrap}
+  .draft .dco{font-weight:700;font-size:14.5px}
+  .draft .dto{font-family:var(--mono);font-size:11px;color:var(--muted);word-break:break-all}
+  .draft .dsub{padding:0 15px 10px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--border)}
+  .draft .dsub .k{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-right:7px}
+  .draft .dbody{margin:0;padding:13px 15px;font-family:var(--font);font-size:12.5px;line-height:1.55;color:var(--ink-soft);
+    white-space:pre-wrap;word-break:break-word;background:var(--surface);flex:1;max-height:none}
+  .draft .dact{display:flex;gap:8px;padding:11px 15px 14px;border-top:1px solid var(--border)}
+  .draft .dact button,.draft .dact a{font:inherit;font-size:12.5px;font-weight:600;border-radius:8px;padding:8px 13px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border-strong);text-decoration:none}
+  .draft .dact .cp{background:var(--surface-2);color:var(--ink-soft)}
+  .draft .dact .cp:hover{border-color:var(--accent);color:var(--accent)}
+  .draft .dact .ml{background:var(--accent);border-color:var(--accent);color:#fff}
+  .draft .dact .ml:hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+  .card.has-draft{cursor:help}
+  .dflag{display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--interviewing)}
+  .stagectl{display:flex;align-items:center;gap:7px;margin-top:11px}
+  .stagectl .lbl{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .stagesel{font:inherit;font-size:11.5px;font-weight:600;color:var(--ink-soft);background:var(--surface-2);
+    border:1px solid var(--border-strong);border-radius:7px;padding:4px 7px;cursor:pointer}
+  .stagesel:hover{border-color:var(--accent);color:var(--accent)}
+  .pact .sent{background:var(--offer-wash);border-color:var(--offer);color:var(--offer)}
+  .pact .sent:hover{background:var(--offer);color:#fff}
+  .toasts{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;z-index:130;align-items:center;pointer-events:none}
+  .toast{background:var(--surface);border:1px solid var(--border-strong);border-left:3px solid var(--accent);
+    box-shadow:var(--shadow);border-radius:9px;padding:10px 16px;font-size:13px;font-weight:600;color:var(--ink);
+    opacity:0;transform:translateY(10px);transition:opacity .2s,transform .2s}
+  .toast.show{opacity:1;transform:none}
+  .toast.ok{border-left-color:var(--offer)}
+  .toast.err{border-left-color:#c0392b}
+  #draftpop{position:fixed;z-index:120;width:390px;max-width:calc(100vw - 24px);background:var(--surface);border:1px solid var(--border-strong);border-left:3px solid var(--interviewing);border-radius:11px;box-shadow:0 14px 44px rgba(0,0,0,.30);display:none}
+  #draftpop .tto{font-family:var(--mono);font-size:10.5px;color:var(--muted);padding:12px 15px 6px;word-break:break-all}
+  #draftpop .tsub{font-weight:700;color:var(--ink);font-size:12.5px;padding:0 15px 9px;border-bottom:1px solid var(--border)}
+  #draftpop .tbody{white-space:pre-wrap;font-size:12px;line-height:1.55;color:var(--ink-soft);padding:12px 15px;max-height:42vh;overflow:auto}
+  #draftpop .pact{display:flex;gap:8px;padding:11px 15px 13px;border-top:1px solid var(--border)}
+  #draftpop .pact button,#draftpop .pact a{font:inherit;font-size:12.5px;font-weight:600;border-radius:8px;padding:8px 13px;cursor:pointer;border:1px solid var(--border-strong);text-decoration:none;text-align:center}
+  #draftpop .pact .cp{background:var(--surface-2);color:var(--ink-soft)}
+  #draftpop .pact .cp:hover{border-color:var(--accent);color:var(--accent)}
+  #draftpop .pact .ml{background:var(--accent);border-color:var(--accent);color:#fff}
+  #draftpop .pact .ml:hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+  #readyDrafts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+  .rtile{display:inline-flex;flex-direction:column;gap:2px;min-width:130px;max-width:230px;cursor:default;
+    background:var(--surface);border:1px solid var(--border-strong);border-left:3px solid var(--interviewing);border-radius:9px;padding:8px 12px;transition:.12s}
+  .rtile:hover{border-color:var(--interviewing);box-shadow:var(--shadow)}
+  .rtile .rco{font-weight:700;font-size:12.5px;color:var(--ink);display:flex;align-items:center;gap:5px}
+  .rtile .rsub{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+  footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);color:var(--faint);font-size:12px;line-height:1.6}
+  footer code{font-family:var(--mono);color:var(--muted)}
+  @media (max-width:820px){.stats{grid-template-columns:repeat(2,1fr)}header.top h1{font-size:22px}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Job search · live pipeline</div>
+      <h1>Applications</h1>
+      <div class="sub" id="subline"></div>
+    </div>
+    <div class="head-right">
+      <nav class="nav"><a href="/">Board</a><a href="/applications.html" class="active">Applications</a><a href="/conversations.html">Conversations</a><a href="/nextsteps.html">Next Steps</a></nav>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"><span id="themeIcon">◐</span></button>
+    </div>
+  </header>
+
+  <section class="stats" id="stats"></section>
+
+  <div class="sect-title" id="raTitle"><h2>Ready to send</h2><div class="rule"></div><span class="dcount" id="raCount"></span></div>
+  <div id="readyDrafts"></div>
+
+  <section class="board" id="board"></section>
+  <div id="draftpop"></div>
+
+  <div class="sect-title"><h2>Contacts</h2><div class="rule"></div></div>
+  <section class="contacts" id="contacts"></section>
+
+  <footer>
+    Generated from <code>tracking/APPLICATIONS.md</code>. Update that doc (or say “email pass”) and run
+    <code>python3 ui/build_applications.py</code> to refresh. The <strong>Next step</strong> on each card is the open action.
+  </footer>
+</div>
+
+<script>
+let PIPELINE = __PIPELINE__, CONTACTS = __CONTACTS__, DRAFTS = __DRAFTS__;
+const STAGES = {
+  offer:{label:'Offer',c:'var(--offer)',w:'var(--offer-wash)'},
+  interviewing:{label:'Interviewing',c:'var(--interviewing)',w:'var(--interviewing-wash)'},
+  applied:{label:'Applied',c:'var(--applied)',w:'var(--applied-wash)'},
+  rejected:{label:'Rejected',c:'var(--rejected)',w:'var(--rejected-wash)'},
+  withdrawn:{label:'Withdrawn',c:'var(--rejected)',w:'var(--rejected-wash)'},
+};
+const ORDER = ['offer','interviewing','applied','rejected','withdrawn'];
+const STAGE_OPTS = ['applied','interviewing','offer','rejected','withdrawn'];
+const $=s=>document.querySelector(s);
+const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function toast(text,kind){let c=$('#toasts');if(!c){c=document.createElement('div');c.id='toasts';c.className='toasts';c.setAttribute('aria-live','polite');document.body.appendChild(c);}
+  const t=document.createElement('div');t.className='toast '+(kind||'');t.textContent=text;c.appendChild(t);
+  requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),260);},2200);}
+function isLive(){return document.body.classList.contains('live');}
+
+function stageOf(s){return STAGES[s]?s:'applied';}
+
+function draftIdx(company){
+  const cl=company.toLowerCase();
+  return DRAFTS.findIndex(d=>{const dc=(d.company||'').toLowerCase();return d.subject&&d.body&&dc&&(dc===cl||cl.includes(dc)||dc.includes(cl));});
+}
+function card(p,meta,idx){
+  const closed = stageOf(p.stage)==='rejected'||stageOf(p.stage)==='withdrawn';
+  const di = draftIdx(p.company);
+  return `<article class="card${di>=0?' has-draft':''}" style="--c:${meta.c};--cw:${meta.w}"${di>=0?` data-draft="${di}"`:''}>
+    <div class="b">
+      <div class="co-line"><span class="co">${esc(p.company)}</span><span class="pill" style="--c:${meta.c};--cw:${meta.w}">${meta.label}</span></div>
+      <div class="role">${esc(p.role)}</div>
+      <div class="rows">
+        ${p.contact&&p.contact!=='—'?`<div class="r"><span class="ic">👤</span><span>${esc(p.contact)}</span></div>`:''}
+        ${p.last&&p.last!=='—'?`<div class="r"><span class="ic">✉️</span><span>${esc(p.last)}</span></div>`:''}
+      </div>
+      ${p.next&&p.next!=='—'?`<div class="next ${closed?'closed':''}"><div class="lbl">${closed?'Status':'Next step'}</div>${esc(p.next)}</div>`:''}
+      ${di>=0?`<div class="dflag">✎ draft ready — hover to preview &amp; send</div>`:''}
+      <div class="stagectl"><span class="lbl">Stage</span><select class="stagesel" data-idx="${idx}" title="${isLive()?'Change stage':'Start serve.py to edit'}">
+        ${STAGE_OPTS.map(s=>`<option value="${s}"${s===stageOf(p.stage)?' selected':''}>${STAGES[s].label}</option>`).join('')}
+      </select></div>
+    </div></article>`;
+}
+
+function renderAll(){
+  const counts={};PIPELINE.forEach(p=>{const s=stageOf(p.stage);counts[s]=(counts[s]||0)+1});
+
+  $('#subline').textContent = `${PIPELINE.length} applications · ${counts.interviewing||0} interviewing · ${counts.applied||0} awaiting · ${counts.rejected||0} closed`;
+
+  $('#stats').innerHTML = [['interviewing','Interviewing'],['applied','Awaiting reply'],['offer','Offers'],['rejected','Rejected']]
+    .map(([k,l])=>`<div class="stat" style="--c:${STAGES[k].c}"><div class="n">${counts[k]||0}</div><div class="l">${l}</div></div>`).join('');
+
+  $('#board').innerHTML = ORDER.filter(s=>counts[s]).map(s=>{
+    const meta=STAGES[s];
+    const items=PIPELINE.filter(p=>stageOf(p.stage)===s);
+    return `<div class="col"><div class="col-head" style="color:${meta.c}">
+      <span class="dot" style="background:${meta.c}"></span>${meta.label}<span class="cnt">${items.length}</span></div>
+      <div class="cards">${items.map(p=>card(p,meta,PIPELINE.indexOf(p))).join('')}</div></div>`;
+  }).join('');
+  document.querySelectorAll('.card[data-draft]').forEach(bindDraftHover);
+
+  const ready=DRAFTS.map((d,i)=>i).filter(i=>DRAFTS[i].subject&&DRAFTS[i].body);
+  if(ready.length){
+    $('#readyDrafts').innerHTML=ready.map(i=>{const d=DRAFTS[i];
+      return `<span class="rtile" data-draft="${i}"><span class="rco">✎ ${esc(d.company)}</span><span class="rsub">${esc(d.subject)}</span></span>`;}).join('');
+    $('#raCount').textContent=ready.length+' ready';
+    $('#raTitle').style.display='';
+    document.querySelectorAll('.rtile[data-draft]').forEach(bindDraftHover);
+  }else{$('#readyDrafts').innerHTML='';$('#raTitle').style.display='none';}
+
+  $('#contacts').innerHTML = CONTACTS.length ? CONTACTS.map(c=>`<div class="contact">
+    <div class="nm">${esc(c.name)}</div><div class="rl">${esc(c.role)} · ${esc(c.company)}</div>
+    ${c.email?`<div class="em">${esc(c.email)}</div>`:''}
+    ${c.notes?`<div class="nt">${esc(c.notes)}</div>`:''}</div>`).join('')
+    : `<div style="color:var(--muted);padding:20px">No named contacts yet.</div>`;
+}
+
+// Change a pipeline card's stage — writes straight to APPLICATIONS.md via /api/app-status
+async function changeStage(idx,val,sel){
+  const p=PIPELINE[idx];if(!p)return;
+  if(!isLive()){sel.value=stageOf(p.stage);toast('Start serve.py to edit','err');return;}
+  const prev=p.stage;p.stage=val;renderAll();
+  try{
+    const r=await fetch('/api/app-status',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({company:p.company,role:p.role,value:val})});
+    const d=await r.json();
+    if(d.ok)toast(d.folder?`${p.company} → ${STAGES[val].label} · folder moved to 0_applied`:`${p.company} → ${STAGES[val].label}`,'ok');
+    else{p.stage=prev;renderAll();toast(d.error||'Update failed','err');}
+  }catch(_){p.stage=prev;renderAll();toast('No backend','err');}
+}
+$('#board').addEventListener('change',e=>{const sel=e.target.closest('.stagesel');if(sel)changeStage(+sel.dataset.idx,sel.value,sel);});
+
+// Mark a draft sent — deletes its block from APPLICATIONS.md via /api/draft-sent
+async function markSent(d,btn){
+  if(!isLive()){toast('Start serve.py to edit','err');return;}
+  if(btn){btn.disabled=true;btn.textContent='Marking sent…';}
+  try{
+    const r=await fetch('/api/draft-sent',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({company:d.company,subject:d.subject})});
+    const j=await r.json();
+    if(j.ok){DRAFTS=DRAFTS.filter(x=>x!==d);draftpop.style.display='none';renderAll();toast(`Marked sent — ${d.company}`,'ok');}
+    else{if(btn){btn.disabled=false;btn.textContent='Sent ✓';}toast(j.error||'Failed to mark sent','err');}
+  }catch(_){if(btn){btn.disabled=false;btn.textContent='Sent ✓';}toast('No backend','err');}
+}
+
+// Interactive draft popover on hover — over a pipeline card (or an orphan-draft chip)
+const draftpop=document.getElementById('draftpop');
+function mailto(d){return 'mailto:'+encodeURIComponent(d.to)+'?subject='+encodeURIComponent(d.subject)+'&body='+encodeURIComponent(d.body);}
+function copyDraft(d,btn){const text='Subject: '+d.subject+'\n\n'+d.body;if(navigator.clipboard)navigator.clipboard.writeText(text);
+  if(btn){const t=btn.textContent;btn.textContent='Copied ✓';setTimeout(()=>btn.textContent=t,1400);}}
+function positionPop(anchor){const r=anchor.getBoundingClientRect(),w=draftpop.offsetWidth,h=draftpop.offsetHeight,pad=10;
+  let x=r.right+pad,y=r.top;
+  if(x+w>innerWidth-8)x=r.left-w-pad;          // no room on the right → flip left
+  if(x<8)x=Math.max(8,innerWidth-w-8);
+  if(y+h>innerHeight-8)y=Math.max(8,innerHeight-h-8);
+  draftpop.style.left=x+'px';draftpop.style.top=y+'px';}
+let hideT=null;
+function showPop(anchor,d){clearTimeout(hideT);
+  draftpop.innerHTML=`<div class="tto">To: ${esc(d.to)}</div><div class="tsub">${esc(d.subject)}</div>`+
+    `<div class="tbody">${esc(d.body)}</div>`+
+    `<div class="pact"><button class="cp">Copy</button><a class="ml" href="${mailto(d)}" target="_blank" rel="noopener">Open in email ↗</a>`+
+    `<button class="sent" title="${isLive()?'Remove this draft — you sent it':'Start serve.py to edit'}">Sent ✓</button></div>`;
+  draftpop.querySelector('.cp').onclick=e=>copyDraft(d,e.currentTarget);
+  draftpop.querySelector('.sent').onclick=e=>markSent(d,e.currentTarget);
+  draftpop.style.display='block';positionPop(anchor);}
+function scheduleHide(){clearTimeout(hideT);hideT=setTimeout(()=>{draftpop.style.display='none';},180);}
+function bindDraftHover(el){const d=DRAFTS[+el.dataset.draft];if(!d)return;
+  el.addEventListener('mouseenter',()=>showPop(el,d));
+  el.addEventListener('mouseleave',scheduleHide);}
+draftpop.addEventListener('mouseenter',()=>clearTimeout(hideT));
+draftpop.addEventListener('mouseleave',scheduleHide);
+
+renderAll();
+
+(async function detect(){
+  try{const r=await fetch('/api/ping',{cache:'no-store'});
+    if(r.ok){document.body.classList.add('live');
+      const ar=await fetch('/api/applications',{cache:'no-store'});
+      if(ar.ok){const d=await ar.json();PIPELINE=d.pipeline;CONTACTS=d.contacts;DRAFTS=d.drafts;renderAll();}
+    }
+  }catch(_){}
+})();
+
+const root=document.documentElement;
+const cur=()=>root.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+$('#themeBtn').onclick=()=>{const n=cur()==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('jsboard-theme',n);}catch(e){}$('#themeIcon').textContent=n==='dark'?'☾':'☀';};
+$('#themeIcon').textContent=cur()==='dark'?'☾':'☀';
+</script>

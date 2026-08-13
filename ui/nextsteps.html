@@ -1,0 +1,195 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Next Steps — Job Search</title>
+<style>
+  :root{
+    --bg:#f5f3ee; --surface:#fffdf9; --surface2:#f0ece3; --ink:#1d1b17; --ink-soft:#4b483f; --muted:#7c786e; --faint:#a7a297;
+    --border:#e6e0d4; --border-strong:#d4ccbc; --accent:#0f7d70; --accent-ink:#0a5d54; --accent-wash:#e4f1ee;
+    --red:#c0392b; --amber:#b5852a; --blue:#3f6d8e; --green:#2f9e6b;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace; --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  @media(prefers-color-scheme:dark){:root{
+    --bg:#151714; --surface:#1d201b; --surface2:#252822; --ink:#ece9e2; --ink-soft:#b8b4aa; --muted:#8b877d; --faint:#6f6c63;
+    --border:#2d312a; --border-strong:#3b4038; --accent:#4bb8a9; --accent-ink:#7fd4c8; --accent-wash:#12312b;
+    --red:#e0654f; --amber:#d3a24e; --blue:#7ba6c6; --green:#4fbd8a;
+  }}
+  :root[data-theme="light"]{--bg:#f5f3ee;--surface:#fffdf9;--surface2:#f0ece3;--ink:#1d1b17;--ink-soft:#4b483f;--muted:#7c786e;--border:#e6e0d4;--border-strong:#d4ccbc;--accent:#0f7d70;--accent-ink:#0a5d54;--accent-wash:#e4f1ee;--red:#c0392b;--amber:#b5852a;--blue:#3f6d8e;--green:#2f9e6b;}
+  :root[data-theme="dark"]{--bg:#151714;--surface:#1d201b;--surface2:#252822;--ink:#ece9e2;--ink-soft:#b8b4aa;--muted:#8b877d;--border:#2d312a;--border-strong:#3b4038;--accent:#4bb8a9;--accent-ink:#7fd4c8;--accent-wash:#12312b;--red:#e0654f;--amber:#d3a24e;--blue:#7ba6c6;--green:#4fbd8a;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:26px 20px 80px}
+  a{color:var(--accent-ink)}
+  .head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:6px}
+  h1{font-size:26px;margin:0;letter-spacing:-.01em}
+  .topnav{display:flex;gap:8px}
+  .topnav a{border:1px solid var(--border-strong);background:var(--surface);color:var(--ink-soft);border-radius:20px;padding:7px 13px;font-size:13px;text-decoration:none}
+  .topnav a:hover{border-color:var(--accent);color:var(--accent)}
+  .topnav a.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .sub{color:var(--muted);font-size:13.5px;margin:2px 0 22px}
+  .sub b{color:var(--ink-soft)}
+
+  .group{margin:26px 0 8px}
+  .ghead{display:flex;align-items:baseline;gap:9px;margin:0 0 12px}
+  .ghead .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .ghead h2{font-size:15px;margin:0;letter-spacing:.01em}
+  .ghead .n{font-family:var(--mono);font-size:12px;color:var(--faint)}
+
+  .item{display:flex;gap:13px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;padding:14px 16px;margin:9px 0;transition:opacity .15s,box-shadow .15s,border-color .15s}
+  .item.done{opacity:.5}
+  .item.dragging{opacity:.35}
+  .item.drop-before{box-shadow:inset 0 2px 0 0 var(--accent)}
+  .item.drop-after{box-shadow:inset 0 -2px 0 0 var(--accent)}
+  .grip{flex:none;width:14px;height:21px;margin-top:1px;cursor:grab;color:var(--faint);
+    display:grid;place-items:center;font-size:13px;letter-spacing:1px;line-height:1;user-select:none}
+  .grip:active{cursor:grabbing}
+  .grip:hover{color:var(--muted)}
+  body:not(.live) .grip{visibility:hidden}
+  .check{flex:none;width:21px;height:21px;border:2px solid var(--border-strong);border-radius:6px;cursor:pointer;
+    margin-top:1px;display:grid;place-items:center;color:transparent;font-size:13px;transition:all .15s}
+  .check:hover{border-color:var(--accent)}
+  .item.done .check{background:var(--accent);border-color:var(--accent);color:#fff}
+  .body{flex:1;min-width:0}
+  .t{font-weight:600;font-size:15px}
+  .item.done .t{text-decoration:line-through}
+  .d{color:var(--ink-soft);font-size:13.5px;margin-top:3px}
+  .metarow{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;align-items:center}
+  .badge{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:20px;border:1px solid var(--border-strong);color:var(--muted);white-space:nowrap}
+  .badge.due{color:#fff;border:none;background:var(--amber)}
+  .badge.due.soon{background:var(--red)}
+  .badge.ref{background:var(--surface2)}
+  .badge.link{background:var(--accent-wash);color:var(--accent-ink);border-color:transparent;text-decoration:none}
+
+  .meet{margin-top:14px}
+  .mrow{display:grid;grid-template-columns:96px 1fr;gap:14px;padding:11px 0;border-top:1px solid var(--border)}
+  .mrow:first-child{border-top:none}
+  .mdate{font-family:var(--mono);font-size:12.5px;color:var(--accent);padding-top:1px}
+  .mtitle{font-size:14px;font-weight:600}
+  .mnote{color:var(--muted);font-size:13px;margin-top:2px}
+  .empty{color:var(--muted);font-size:14px;padding:20px 0}
+  .foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--border);color:var(--faint);font-size:12.5px}
+  .banner{display:none;background:var(--amber);color:#1d1b17;font-size:12.5px;padding:6px 12px;border-radius:8px;margin-bottom:14px}
+  body:not(.live) .banner{display:block}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>🎯 Next Steps</h1>
+    <nav class="topnav">
+      <a href="/">Board</a><a href="/applications.html">Applications</a>
+      <a href="/conversations.html">Conversations</a><a href="/nextsteps.html" class="active">Next Steps</a>
+    </nav>
+  </div>
+  <p class="sub" id="sub"></p>
+  <div class="banner">Read-only — start <code>serve.py</code> to tick items off (writes to tracking/nextsteps_done.json).</div>
+  <div id="board"></div>
+  <div class="group">
+    <div class="ghead"><span class="dot" style="background:var(--blue)"></span><h2>Recent meetings</h2><span class="n" id="mcount"></span></div>
+    <div class="meet" id="meet"></div>
+  </div>
+  <div class="foot">Source: <code>tracking/NEXT_STEPS.md</code> · edit there to add items · done-state in <code>tracking/nextsteps_done.json</code>.</div>
+</div>
+<script>
+let GROUPS = [{"section": "This week", "items": [{"id": "example-reply-to-acme-s-recruiter", "title": "Example: reply to Acme's recruiter", "body": "They asked for your availability Tuesday — send three slots", "status": "todo", "due": "2026-01-06", "ref": "#1", "link": "", "done": false}]}], MEETINGS = [{"date": "2026-01-01", "title": "Acme — Jane Doe (email)", "note": "📋 confirmed interview for next week (#1)"}];
+const $=s=>document.querySelector(s);
+const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const DOTS={0:'var(--red)',1:'var(--amber)',2:'var(--blue)'};
+const today=new Date();
+
+function dueBadge(due){
+  if(!due)return '';
+  const d=new Date(due+'T00:00:00'), days=Math.round((d-today)/864e5);
+  const soon=days<=2?' soon':'';
+  const lbl=days<0?`overdue ${-days}d`:days===0?'today':days===1?'tomorrow':`in ${days}d`;
+  return `<span class="badge due${soon}">${esc(due)} · ${lbl}</span>`;
+}
+function refBadge(ref){
+  if(!ref)return '';
+  if(ref.startsWith('#'))return `<a class="badge ref link" href="/?q=${ref.slice(1)}" title="open on the board">${esc(ref)}</a>`;
+  return `<span class="badge ref">${esc(ref)}</span>`;
+}
+function itemHtml(it,section){
+  return `<div class="item${it.done?' done':''}" data-id="${esc(it.id)}" data-section="${esc(section)}" draggable="true">
+    <div class="grip" title="drag to reorder">⠿</div>
+    <div class="check" role="checkbox" aria-checked="${it.done}" tabindex="0">✓</div>
+    <div class="body">
+      <div class="t">${esc(it.title)}</div>
+      ${it.body?`<div class="d">${esc(it.body)}</div>`:''}
+      <div class="metarow">
+        ${dueBadge(it.due)}${refBadge(it.ref)}
+        ${it.link?`<a class="badge link" href="${esc(it.link)}" target="_blank" rel="noopener">open ↗</a>`:''}
+      </div>
+    </div></div>`;
+}
+function render(){
+  const open=GROUPS.reduce((n,g)=>n+g.items.filter(i=>!i.done).length,0);
+  const tot=GROUPS.reduce((n,g)=>n+g.items.length,0);
+  $('#sub').innerHTML=`<b>${open}</b> open of ${tot} · updated from the tracker`;
+  $('#board').innerHTML=GROUPS.map((g,gi)=>`
+    <div class="group"><div class="ghead"><span class="dot" style="background:${DOTS[gi]||'var(--muted)'}"></span>
+      <h2>${esc(g.section)}</h2><span class="n">${g.items.filter(i=>!i.done).length}/${g.items.length}</span></div>
+      ${g.items.length?g.items.map(it=>itemHtml(it,g.section)).join(''):'<div class="empty">Nothing here.</div>'}
+    </div>`).join('');
+  $('#meet').innerHTML=MEETINGS.length?MEETINGS.map(m=>`<div class="mrow">
+    <div class="mdate">${esc(m.date)}</div>
+    <div><div class="mtitle">${esc(m.title)}</div>${m.note?`<div class="mnote">${esc(m.note)}</div>`:''}</div></div>`).join('')
+    :'<div class="empty">No meetings logged.</div>';
+  $('#mcount').textContent=MEETINGS.length;
+}
+async function toggle(id){
+  const it=GROUPS.flatMap(g=>g.items).find(x=>x.id===id); if(!it)return;
+  if(!document.body.classList.contains('live')){return;}
+  it.done=!it.done; render();
+  try{const r=await fetch('/api/nextstep-done',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({id,value:it.done})});const d=await r.json();if(d.ok)it.done=d.done;render();}
+  catch(_){it.done=!it.done;render();}
+}
+document.addEventListener('click',e=>{const c=e.target.closest('.check');if(c)toggle(c.closest('.item').dataset.id);});
+document.addEventListener('keydown',e=>{if((e.key===' '||e.key==='Enter')&&e.target.classList.contains('check')){e.preventDefault();toggle(e.target.closest('.item').dataset.id);}});
+
+// --- drag-to-reorder (per section; persisted to tracking/nextsteps_order.json) ---
+let dragId=null, dragSection=null;
+const board=$('#board');
+function clearDropMarks(){board.querySelectorAll('.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-before','drop-after'));}
+board.addEventListener('dragstart',e=>{
+  const it=e.target.closest('.item'); if(!it)return;
+  dragId=it.dataset.id; dragSection=it.dataset.section;
+  it.classList.add('dragging');
+  e.dataTransfer.effectAllowed='move';
+});
+board.addEventListener('dragend',e=>{
+  const it=e.target.closest('.item'); if(it)it.classList.remove('dragging');
+  clearDropMarks(); dragId=null; dragSection=null;
+});
+board.addEventListener('dragover',e=>{
+  const over=e.target.closest('.item');
+  if(!over||!dragId||over.dataset.section!==dragSection||over.dataset.id===dragId)return;
+  e.preventDefault();
+  const before=(e.clientY-over.getBoundingClientRect().top)<over.offsetHeight/2;
+  clearDropMarks();
+  over.classList.add(before?'drop-before':'drop-after');
+});
+board.addEventListener('drop',e=>{
+  const over=e.target.closest('.item');
+  clearDropMarks();
+  if(!over||!dragId||over.dataset.section!==dragSection||over.dataset.id===dragId)return;
+  e.preventDefault();
+  const g=GROUPS.find(x=>x.section===dragSection); if(!g)return;
+  const from=g.items.findIndex(i=>i.id===dragId), to=g.items.findIndex(i=>i.id===over.dataset.id);
+  if(from<0||to<0)return;
+  const before=(e.clientY-over.getBoundingClientRect().top)<over.offsetHeight/2;
+  const [moved]=g.items.splice(from,1);
+  let insertAt=g.items.findIndex(i=>i.id===over.dataset.id);
+  if(!before)insertAt+=1;
+  g.items.splice(insertAt,0,moved);
+  render();
+  fetch('/api/nextstep-reorder',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({section:dragSection,order:g.items.map(i=>i.id)})}).catch(()=>{});
+});
+async function boot(){
+  try{const p=await fetch('/api/ping',{cache:'no-store'});if(p.ok){document.body.classList.add('live');
+    const r=await fetch('/api/nextsteps',{cache:'no-store'});if(r.ok){const d=await r.json();GROUPS=d.groups;MEETINGS=d.meetings;}}}catch(_){}
+  render();
+}
+boot();
+</script></body></html>

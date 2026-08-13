@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Daily job-search pipeline at 07:00 (macOS launchd). If the Mac was asleep/off
+     at 07:00, launchd runs it at the next wake (StartCalendarInterval catch-up).
+
+     BEFORE installing: replace every /path/to/cv-suite below with your actual
+     absolute repo path (e.g. /Users/you/Documents/git/cv-suite), and rename the
+     Label + this file to something namespaced to you if you like
+     (com.<you>.cvdaily), keeping the two "com.candidate.cvdaily" strings in
+     sync with the filename.
+
+     Install:  cp pipeline/com.candidate.cvdaily.plist ~/Library/LaunchAgents/
+               launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.candidate.cvdaily.plist
+     Remove:   launchctl bootout gui/$(id -u)/com.candidate.cvdaily
+     Run now:  launchctl kickstart gui/$(id -u)/com.candidate.cvdaily -->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.candidate.cvdaily</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/path/to/cv-suite/pipeline/daily_run.sh</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/path/to/cv-suite</string>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key><integer>7</integer>
+    <key>Minute</key><integer>0</integer>
+  </dict>
+  <key>RunAtLoad</key>
+  <false/>
+  <key>StandardOutPath</key>
+  <string>/path/to/cv-suite/tracking/pipeline.launchd.log</string>
+  <key>StandardErrorPath</key>
+  <string>/path/to/cv-suite/tracking/pipeline.launchd.log</string>
+</dict>
+</plist>

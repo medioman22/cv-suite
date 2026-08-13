@@ -1,0 +1,33 @@
+% ═══════════════════════════════════════════════════════════════════════════
+% CONTENT LIBRARY (OPTIONAL) — see README.md before using this.
+%
+% Each bullet/skill is defined ONCE here and referenced by id from any cv.tex
+% that opts in, so a correction here propagates to every tailored CV on rebuild.
+%
+%   \defitem{id}{\item ...body...}   define an item (body starts with \item)
+%   \I{id}                            emit one item
+%   \IL{id1,id2,id3}                  emit several, in order (no spaces in list)
+%
+% ids are dotted namespaces (skill.*, role.<employer>.*) so they read as a rough
+% hierarchy. Variants get a suffix, e.g. role.acme.infra.platform.
+%
+% THE THREE ITEMS BELOW ARE PLACEHOLDERS demonstrating the pattern — replace them
+% with your own content, or delete this file if you're not adopting the pattern.
+% ═══════════════════════════════════════════════════════════════════════════
+\makeatletter
+\newcommand{\defitem}[2]{\expandafter\def\csname cvitem@#1\endcsname{#2}}
+\newcommand{\I}[1]{\csname cvitem@#1\endcsname}
+\newcommand{\IL}[1]{\@for\@cvx:=#1\do{\csname cvitem@\@cvx\endcsname}}
+\makeatother
+
+% ───────────────────────────── Key Skills (example) ─────────────────────────
+\defitem{skill.example.core}{\item \textmedium{Core skill area:} A short, factual
+  summary of one skill cluster — the kind of line that repeats near-verbatim
+  across several tailored CVs.}
+\defitem{skill.example.tools}{\item \textmedium{Tools:} Comma-separated tools/
+  frameworks you'd otherwise retype in every \texttt{cv.tex}.}
+
+% ───────────────────────── Example employer bullet ──────────────────────────
+\defitem{role.example.impact}{\item Shipped \textbf{a concrete, quantified
+  result} at Example Corp — replace with your own impact bullet, referenced by
+  this id from every CV that includes this role.}

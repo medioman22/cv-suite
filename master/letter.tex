@@ -1,0 +1,43 @@
+% !TEX program = xelatex
+% Cover-letter template. Built by build_letter.py, which fills the two
+% placeholders below from a folder's message_to_hiring_team.md. Matches the CV
+% letterhead style (Avenir Next, grey contact line). US-letter, one page.
+%
+% EDIT the name/contact line below to match your own (and master/cv.tex's header).
+\documentclass[11pt]{article}
+\usepackage[letterpaper,top=22mm,bottom=20mm,left=24mm,right=24mm]{geometry}
+\usepackage{fontspec}
+\usepackage{xcolor}
+\usepackage{parskip}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+
+\setmainfont{Avenir Next}[
+  UprightFont = * Regular, ItalicFont = * Italic,
+  BoldFont = * Demi Bold, BoldItalicFont = * Demi Bold Italic,
+]
+\newfontfamily\avenirlight{Avenir Next}[UprightFont = * Ultra Light]
+\newfontfamily\avenirmedium{Avenir Next}[UprightFont = * Medium]
+
+\definecolor{textcol}{HTML}{333333}
+\definecolor{greycol}{HTML}{7A7A7A}
+\definecolor{rulecol}{HTML}{CCCCCC}
+\pagestyle{empty}
+\setlength{\parskip}{7pt}
+\linespread{1.12}
+
+\begin{document}
+\color{textcol}
+
+{\avenirlight\fontsize{22}{22}\selectfont\addfontfeature{LetterSpace=4.0}Your Name}\\[3pt]
+{\avenirmedium\fontsize{9.5}{12}\selectfont\color{greycol}%
+Your City, Country \ \textbar\ \ +1 555 000 0000 \ \textbar\ \ you@example.com \ \textbar\ \ linkedin.com/in/yourprofile}\\[6pt]
+{\color{rulecol}\rule{\linewidth}{0.6pt}}
+
+\vspace{6pt}
+{\bfseries\fontsize{12}{15}\selectfont __TITLE__\par}
+\vspace{2pt}
+
+__BODY__
+
+\end{document}
