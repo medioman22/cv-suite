@@ -1,0 +1,9 @@
+# TeX Live packages needed to build the CVs with XeLaTeX, beyond TinyTeX's base set.
+# Install: tlmgr install $(grep -v '^#' tex-packages.txt)
+# The CV also needs the system font "Avenir Next" (ships with macOS).
+extsizes
+enumitem
+needspace
+setspace
+colortbl
+pgf
